@@ -1,8 +1,11 @@
 # Account Takeover Detection — Behavioral Anomaly Classifier
 
 **Author:** Martin James Ng'ang'a | Nairobi, Kenya 🇰🇪
+
 **Status:** ⏳ Planned — Week 13
-**Stack:** Sequence modeling (LSTM / gradient-boosted feature engineering) · Vertex AI Training · FastAPI · PostgreSQL · Langfuse · Docker · GCP
+
+**Stack:** Sequence modeling (LSTM / gradient-boosted feature engineering) 
+· Vertex AI Training · FastAPI · PostgreSQL · Langfuse · Docker · GCP
 
 ---
 
