@@ -81,7 +81,7 @@ Same standard as every other project: real numbers, honest status, "Where This F
     │   └── train_sequence.py        # LSTM sequence model (stretch goal)
     ├── vertex/
     │   └── training_job_config.py   # Vertex AI Training Job submission
-    ├── screenshots/                 # proof-of-work screenshots as built
+    ├── outputs/                     # proof-of-work screenshots and results
     ├── docker-compose.yml
     ├── requirements.txt
     └── README.md
