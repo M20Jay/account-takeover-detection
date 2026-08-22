@@ -46,6 +46,8 @@ This is not a standalone model — it's designed from day one to be the second i
 
 Two detection layers feeding one response system is closer to how real security teams actually operate than either layer alone.
 
+The same sequence-and-velocity approach extends naturally to vishing (voice-based social engineering) — a well-documented fraud vector in Kenya's mobile money ecosystem. The call itself isn't the signal; the account action that follows it within minutes is — the same downstream behavioral pattern this project already detects, applied to a different upstream trigger.
+
 ---
 
 ## Build Plan
