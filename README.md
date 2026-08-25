@@ -149,9 +149,10 @@ Chosen deliberately, not by default — each tool solves a specific problem this
 This project is being built in two deliberate sequences — Sequence 1 (Phases 1-5: data, features, model, explainability, calibration, serving) builds and proves the core model correctly in isolation. Sequence 2 (Phase 6: Kafka + Redis) adds the real-time simulation layer on top of a model already trusted to be correct, not built simultaneously, so that if something breaks, it's clear whether the problem is the model or the streaming infrastructure. There's no fixed timeline here — the goal is genuine engineering depth, not speed.
 
 ## Project Structure
-
     account-takeover-detection/
     ├── data/                        # session/event datasets (gitignored)
+    ├── config/
+    │   └── config.yaml              # thresholds: impossible-travel speed, alert cutoff
     ├── notebooks/
     │   ├── 01_EDA_and_Feature_Engineering.ipynb
     │   └── 02_Modeling_Baseline_vs_Sequence.ipynb
@@ -159,9 +160,16 @@ This project is being built in two deliberate sequences — Sequence 1 (Phases 1
     │   ├── app.py                   # FastAPI serving endpoint
     │   ├── feature_engineering.py   # velocity, device-change, geo-jump features
     │   ├── train_baseline.py        # Random Forest / XGBoost baseline
-    │   └── train_sequence.py        # LSTM sequence model (stretch goal)
+    │   ├── train_sequence.py        # LSTM sequence model (stretch goal)
+    │   ├── kafka_producer.py        # Phase 6 — simulates live login stream
+    │   └── kafka_consumer.py        # Phase 6 — real-time scoring from Kafka
+    ├── dags/
+    │   └── retrain_dag.py           # Airflow — weekly retrain on confirmed labels
     ├── vertex/
     │   └── training_job_config.py   # Vertex AI Training Job submission
+    ├── tests/
+    │   ├── test_feature_engineering.py
+    │   └── test_api.py
     ├── outputs/                     # proof-of-work screenshots and results
     ├── docker-compose.yml
     ├── requirements.txt
