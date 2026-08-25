@@ -149,6 +149,7 @@ Chosen deliberately, not by default — each tool solves a specific problem this
 This project is being built in two deliberate sequences — Sequence 1 (Phases 1-5: data, features, model, explainability, calibration, serving) builds and proves the core model correctly in isolation. Sequence 2 (Phase 6: Kafka + Redis) adds the real-time simulation layer on top of a model already trusted to be correct, not built simultaneously, so that if something breaks, it's clear whether the problem is the model or the streaming infrastructure. There's no fixed timeline here — the goal is genuine engineering depth, not speed.
 
 ## Project Structure
+
     account-takeover-detection/
     ├── data/                        # session/event datasets (gitignored)
     ├── config/
@@ -161,6 +162,8 @@ This project is being built in two deliberate sequences — Sequence 1 (Phases 1
     │   ├── feature_engineering.py   # velocity, device-change, geo-jump features
     │   ├── train_baseline.py        # Random Forest / XGBoost baseline
     │   ├── train_sequence.py        # LSTM sequence model (stretch goal)
+    │   ├── model_calibration.py     # Platt Scaling / Isotonic Regression
+    │   ├── shap_explain.py          # SHAP explanation generation
     │   ├── kafka_producer.py        # Phase 6 — simulates live login stream
     │   └── kafka_consumer.py        # Phase 6 — real-time scoring from Kafka
     ├── dags/
@@ -170,7 +173,11 @@ This project is being built in two deliberate sequences — Sequence 1 (Phases 1
     ├── tests/
     │   ├── test_feature_engineering.py
     │   └── test_api.py
+    ├── mlruns/                      # MLflow experiment tracking (gitignored)
     ├── outputs/                     # proof-of-work screenshots and results
+    ├── .env                         # DB credentials, API keys (gitignored)
+    ├── .gitignore
+    ├── Dockerfile
     ├── docker-compose.yml
     ├── requirements.txt
     └── README.md
