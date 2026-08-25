@@ -152,6 +152,7 @@ This project is being built in two deliberate sequences — Sequence 1 (Phases 1
 
     account-takeover-detection/
     ├── data/                        # session/event datasets (gitignored)
+    ├── models/                      # trained model artifacts (.pkl, gitignored)
     ├── config/
     │   └── config.yaml              # thresholds: impossible-travel speed, alert cutoff
     ├── notebooks/
@@ -159,11 +160,13 @@ This project is being built in two deliberate sequences — Sequence 1 (Phases 1
     │   └── 02_Modeling_Baseline_vs_Sequence.ipynb
     ├── src/
     │   ├── app.py                   # FastAPI serving endpoint
-    │   ├── feature_engineering.py   # velocity, device-change, geo-jump features
-    │   ├── train_baseline.py        # Random Forest / XGBoost baseline
-    │   ├── train_sequence.py        # LSTM sequence model (stretch goal)
+    │   ├── feature_engineering.py   # velocity, device-change, geo-jump functions
     │   ├── model_calibration.py     # Platt Scaling / Isotonic Regression
-    │   ├── shap_explain.py          # SHAP explanation generation
+    │   └── shap_explain.py          # SHAP explanation generation
+    ├── scripts/
+    │   ├── download_data.py         # pulls the RBA dataset via kagglehub
+    │   ├── train_baseline.py        # runs training — Random Forest / XGBoost
+    │   ├── train_sequence.py        # runs training — LSTM (stretch goal)
     │   ├── kafka_producer.py        # Phase 6 — simulates live login stream
     │   └── kafka_consumer.py        # Phase 6 — real-time scoring from Kafka
     ├── dags/
@@ -173,12 +176,15 @@ This project is being built in two deliberate sequences — Sequence 1 (Phases 1
     ├── tests/
     │   ├── test_feature_engineering.py
     │   └── test_api.py
+    ├── grafana/
+    │   └── dashboard.json           # dashboard definition
     ├── mlruns/                      # MLflow experiment tracking (gitignored)
     ├── outputs/                     # proof-of-work screenshots and results
     ├── .env                         # DB credentials, API keys (gitignored)
     ├── .gitignore
     ├── Dockerfile
     ├── docker-compose.yml
+    ├── prometheus.yml               # Prometheus scrape config
     ├── requirements.txt
     └── README.md
 
