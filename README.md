@@ -50,6 +50,19 @@ The same sequence-and-velocity approach extends naturally to vishing (voice-base
 
 ---
 
+
+## Dataset
+
+**[Login Data Set for Risk-Based Authentication](https://www.kaggle.com/datasets/dasgroup/rba-dataset)** — 33M+ login attempts, 3.3M+ users, from a large-scale single sign-on (SSO) service in Norway (Feb 2020 – Feb 2021).
+
+Published by Wiefling, Jørgensen, Thunem & Lo Iacono, *Pump Up Password Security! Evaluating and Enhancing Risk-Based Authentication on a Real-World Large-Scale Online Service*, ACM Transactions on Privacy and Security (2022).
+
+Includes a genuine `Is Account Takeover` label — logins identified as account takeover by the original service's own incident response team — alongside IP/geolocation, device/browser fingerprint, login timestamp, and round-trip time (RTT) features.
+
+**Honest disclaimer, stated by the dataset's own authors:** feature values are statistically faithful to real-world patterns but are synthetically generated — the dataset explicitly should not be used in productive intrusion-detection systems. Appropriate for research and portfolio work, which is exactly how it's used here; not a claim of raw production traffic.
+
+Licensed CC BY 4.0.
+
 ## Build Plan
 
 **Phase 1 — Data**
