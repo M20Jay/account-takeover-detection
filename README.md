@@ -72,6 +72,69 @@ Same standard as every other project: real numbers, honest status, "Where This F
 
 ---
 
+
+## Proposed Stack
+
+Chosen deliberately, not by default — each tool solves a specific problem this project genuinely has.
+
+| Tool | Why this one, specifically |
+|------|------------------------------|
+| **Polars** | 33M rows — large enough that pandas' single-threaded, in-memory model genuinely struggles. Polars' Rust-based engine handles this comfortably on a single machine, without the setup overhead of a distributed Spark session. |
+| **scikit-learn** (Random Forest / XGBoost) | Proven, defensible baseline — same family as the fraud detection model. Stretch goal: an LSTM on raw session sequences, compared honestly against this baseline. |
+| **SHAP** | Every prediction needs a traceable reason — which feature (geo-jump, device change, velocity) drove a specific session's score, not just a global feature importance ranking. |
+| **MLflow** | Tracks experiments across baseline vs. sequence model, and across calibration methods — same tool already used for the loan portfolio CLV model, kept consistent. |
+| **Evidently** | Attacker behavior evolves — new device-spoofing techniques, new IP rotation patterns. A takeover model that goes stale silently is a real risk. Evidently detects that drift. Already used in the customer segmentation project. |
+| **FastAPI** | Serving layer, consistent with every other production API in this portfolio. |
+| **PostgreSQL** | Live prediction audit log only — not the training data store. See *Data Flow* below for why. |
+| **Prometheus + Grafana** | Live monitoring, same pattern as fraud detection. |
+| **Apache Airflow** | Scheduled retraining as new labels (confirmed takeover cases) become available — closing the feedback loop. |
+| **Kafka + Redis** | Phase 6 only — simulates a real-time login stream from the historical dataset, with Redis as the feature store holding each user's last known login state for instant geo-jump/velocity comparison. |
+| **Vertex AI Training** | Deliberate choice to build genuine training experience on GCP, distinct from the SageMaker Training Jobs already used on AWS for the deforestation project. |
+| **config.yaml** | Real thresholds (what geo-jump speed counts as "impossible travel," what calibrated score triggers an alert) need to be tunable by a security team without touching code. |
+| **tests/** | Basic pytest coverage — feature engineering output shape, API response format. Same standard as the credit risk and loan portfolio projects. |
+| **Docker** | Containerized deployment, consistent with every other project. |
+
+---
+
+## Data Flow
+
+**Current implementation — honest, static starting point:**
+
+    Kaggle RBA dataset (33M rows, CSV)
+        ↓
+    Polars reads directly from file
+        ↓
+    Feature engineering (geo-jump, device-change, login velocity)
+        ↓
+    Train/test split → baseline model (Random Forest / XGBoost)
+        ↓
+    MLflow tracks the experiment
+        ↓
+    SHAP explains each prediction
+        ↓
+    FastAPI serves the trained model
+        ↓
+    PostgreSQL logs every live prediction (audit trail)
+
+**Target production architecture — what this would look like deployed:**
+
+    Real login events, continuous
+        ↓
+    Application servers emit events → Kafka (same pattern as fraud detection)
+        ↓
+    Consumer reads from Kafka, computes features in real time
+    against each user's last known state, held in Redis (feature store)
+        ↓
+    Trained model scores the session in real time
+        ↓
+    Score + SHAP explanation → SIEM / case management (same pipeline as fraud)
+        ↓
+    PostgreSQL logs the prediction
+        ↓
+    Airflow periodically retrains on newly confirmed labels (weekly)
+
+This project is being built in two deliberate sequences — Sequence 1 (Phases 1-5: data, features, model, explainability, calibration, serving) builds and proves the core model correctly in isolation. Sequence 2 (Phase 6: Kafka + Redis) adds the real-time simulation layer on top of a model already trusted to be correct, not built simultaneously, so that if something breaks, it's clear whether the problem is the model or the streaming infrastructure. There's no fixed timeline here — the goal is genuine engineering depth, not speed.
+
 ## Project Structure
 
     account-takeover-detection/
