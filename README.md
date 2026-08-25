@@ -2,7 +2,7 @@
 
 **Author:** Martin James Ng'ang'a | Nairobi, Kenya 🇰🇪
 
-**Status:** ⏳ Planned — Week 13
+**Status:** 🔄 In Progress — Week 13 (data downloaded, project structure complete)
 
 **Stack:** Sequence modeling (LSTM / gradient-boosted feature engineering) 
 · Vertex AI Training · FastAPI · PostgreSQL · Langfuse · Docker · GCP
